@@ -1,22 +1,6 @@
 module Petli
-  require 'time'
-  require_relative './animator'
-  require_relative './db'
-  require_relative './watch'
-  require_relative './simple_animation'
-
-  POOPLOCS = [[1,1], [1,4], [1,7], [11,1], [11,7], [20,1], [20,4], [20,7]]
-  class Poop < SimpleAnimation
-    attr_reader :hatch
-
-    ANIMATION = ["ı ı ı\n༼ᵔ◡ᵔ༽", "ϟ ϟ ϟ\n༼ಠ益ಠ༽"]
-    def initialize(x, y)
-      super(ANIMATION, x: x, y: y)
-      @hatch = Time.now
-    end
-  end
-
   class Pet
+    require 'time'
     include Watch
     extend DB::Attributes
 
@@ -38,11 +22,6 @@ module Petli
         hatching: (Time.now - Time.parse(self.birth)) < 10,
         mood: self.mood,
       )
-      #sick
-      # longer poop exists, more skulls, less happ(faster)
-      # poop happens after eating (faster unhappy)
-      # hungry (faster unhappy)
-      # food, snack, play more happy
     end
 
     def display
@@ -56,7 +35,7 @@ module Petli
       end
 
       if hours_since(self.last_play) > 3
-        self.happiness -= 1
+        self.happiness = [1, self.happiness-1].max
         self.last_play = Time.now
       end
 
@@ -74,18 +53,18 @@ module Petli
         self.health = [10, self.health+1].min unless food == :medicine
         if food == :candy
           self.discipline = [1, self.discipline-0.3].max
-          self.happiness += [10, self.happiness+1].min
+          self.happiness = [10, self.happiness+1].min
         end
         self.sick = [0, self.sick - 1].max if food == :medicine
       end
     end
 
-    def play(food: :dice)
+    def play(game: :dice)
       self.last_play = Time.now
     end
 
     def poop
-      self.poops << Poop.new(*POOPLOCS[@poops.count]) if @poops.count < POOPLOCS.count
+      self.poops << Poop.new(*POOP::LOCATIONS[self.poops.count]) if self.poops.count < POOP::LOCATIONS.count
     end
 
     def clean

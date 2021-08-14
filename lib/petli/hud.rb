@@ -1,8 +1,6 @@
 require_relative '../tatty/game'
 
 module Petli
-  require_relative 'pet'
-
   class HUD < Tatty::Game
     GAME_WIDTH = 28
     GAME_HEIGHT = 13
@@ -10,44 +8,13 @@ module Petli
     def initialize
       super()
       @pet = Pet.new
+      Rooms.enter(@pet)
     end
 
     def keypress(event)
-      if event.value == "q"
-        exit
-      end
-
+      exit if event.value == "q"
       return if @pet.busy?
-
-      if @isfeeding
-        if event.value == "b"
-          @pet.feed(food: :bread)
-        elsif event.value == "s"
-          @pet.feed(food: :candy)
-        elsif event.value == "m"
-          @pet.feed(food: :medicine)
-        end
-        @isfeeding = false
-        return
-      end
-
-      if @isplaying
-        if event.value == "d"
-          @pet.play(game: :dice)
-        elsif event.value == "g"
-          @pet.play(game: :guess)
-        end
-        @isplaying = false
-        return
-      end
-
-      if event.value == "f"
-        @isfeeding = true
-      elsif event.value == "c"
-        @pet.clean
-      elsif event.value == "p"
-        @isplaying = true
-      end
+      Rooms.current.keypress(event)
     end
 
     def draw
@@ -63,30 +30,13 @@ module Petli
         left: left,
         top: top,
       )
-      render_at(left+9, top+3, "[#{'!'*@pet.sick}SICK#{'!'*@pet.sick}]") if @pet.sick > 0
+      Rooms.current.draw(self, left, top)
       render_at(left+1, top+1, status_bar)
-      render_at(left+9, top+4, @pet.display)
-      render_at(left+1, top+GAME_HEIGHT-3, action_bar)
-      @pet.poops.each do |poop|
-        render_at(left+1+poop.x, top+1+poop.y, poop.step)
-      end
+      render_at(left+1, top+GAME_HEIGHT-2, Rooms.current.action_bar)
     end
 
     def status_bar
       "#{"♥"*@pet.health}#{"♡"*(10-@pet.health)}      #{"☺"*(10-@pet.happiness)}#{"☻"*@pet.happiness}"
     end
-
-    def action_bar
-      subbar = if @isfeeding
-                 "[b]read [s]nack [m]ed"
-               elsif @isplaying
-                 "[g]uess [d]ice"
-               end
-      <<~EOBAR
-        [p]lay   [f]eed  [c]lean
-        #{subbar}
-      EOBAR
-    end
   end
 end
-

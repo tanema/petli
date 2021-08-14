@@ -1,13 +1,13 @@
-require 'json'
-
 module Petli
+  require 'json'
+
   class Animator
     ANIMATIONS = {
       egg: ["   _\n  / \\\n  \\_/", "   _\n((/ \\\n  \\_/))", "   _\n  / \\))\n((\\_/"]*5,
       egg_crack: [" _\n/ \\\n\\_‚/"," _\n/ \\\n\\_¡/"," _\n/ \\\n\\_¦/"," _\n/ ¡\\\n\\_ϟ/"," _\n/ ¦\\\n\\_ϟ/"," _\n/ ϟ\\\n\\_ϟ/","\n/ ϟ\\\n\\_ϟ/"," ☁\n/ ϟ\\\n\\_ϟ/"],
       stand: ["\n\nahe m eha\n", "\n\nahe m eha\n"],
       item: ["\n\nahe m eha fff\n", "\n\nahe m eha fff\n", "\n\nahe m eha fff\n", "\n\nahe m eha fff\n"],
-      eat: ["\n\nahe m eha fff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha   f\n"],
+      eat: ["\n\nahe m eha fff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha   f\n", "\n\nahe m eha   f\n", "\n\nahe m eha\n"],
       walk: ["\n\n ahe m eha\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\n\nah e m eha\n"],
       hop: ["\n\n ahe m eha\n", "\nahe m e ha\n\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\nah e m eha\n\n", "\n\nah e m eha\n"],
     }
@@ -107,7 +107,7 @@ module Petli
 
     def data
       @data ||= JSON.parse(
-        File.read(File.expand_path('character.json', __dir__)),
+        File.read(File.expand_path('../../data/character.json', __dir__)),
         {:symbolize_names => true}
       )
     end

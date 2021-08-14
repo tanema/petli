@@ -13,7 +13,6 @@ module Tatty
       @cursor = TTY::Cursor
       @reader = TTY::Reader.new
       @framerate = 0.1
-      @quit = false
       @buffer = ""
 
       @reader.on(:keypress) do |event|
@@ -27,10 +26,6 @@ module Tatty
 
     def move_to(x, y)
       render @cursor.move_to(x, y)
-    end
-
-    def quit
-      @quit = true
     end
 
     def render(out)
@@ -55,16 +50,17 @@ module Tatty
     def run
       begin
         @cursor.invisible do
-          while !@quit
+          while true
             @reader.read_keypress(nonblock: true)
             last_buffer = @buffer
             @buffer = ""
-            self.reset_screen
+            render @cursor.clear_screen
+            move_to(0, 0)
             self.draw
             if last_buffer != @buffer
               print @buffer
             end
-            self.pause
+            sleep(@framerate)
           end
         end
       rescue Interrupt => e
@@ -72,15 +68,6 @@ module Tatty
         print @cursor.clear_screen
         print @cursor.move_to(0, 0)
       end
-    end
-
-    def pause(time=@framerate)
-      sleep(time)
-    end
-
-    def reset_screen
-      render @cursor.clear_screen
-      move_to(0, 0)
     end
 
     def render_box(*content, **kwargs, &block)

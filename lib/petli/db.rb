@@ -1,9 +1,8 @@
-require "pstore"
-require "forwardable"
-
 module Petli
-  class DB
+  require "pstore"
+  require "forwardable"
 
+  class DB
     module Attributes
       def db_attr(name, default: nil, readonly: false)
         name = name.to_sym
