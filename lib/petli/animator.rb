@@ -6,13 +6,16 @@ module Petli
       egg: ["   _\n  / \\\n  \\_/", "   _\n((/ \\\n  \\_/))", "   _\n  / \\))\n((\\_/"]*5,
       egg_crack: [" _\n/ \\\n\\_‚/"," _\n/ \\\n\\_¡/"," _\n/ \\\n\\_¦/"," _\n/ ¡\\\n\\_ϟ/"," _\n/ ¦\\\n\\_ϟ/"," _\n/ ϟ\\\n\\_ϟ/","\n/ ϟ\\\n\\_ϟ/"," ☁\n/ ϟ\\\n\\_ϟ/"],
       stand: ["\n\nahe m eha\n", "\n\nahe m eha\n"],
+      left: ["\n\nahe m e ha\n", "\n\nahe m e ha\n"],
+      right: ["\n\nah e m eha\n", "\n\nah e m eha\n"],
       item: ["\n\nahe m eha fff\n", "\n\nahe m eha fff\n", "\n\nahe m eha fff\n", "\n\nahe m eha fff\n"],
       eat: ["\n\nahe m eha fff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha   f\n", "\n\nahe m eha   f\n", "\n\nahe m eha\n"],
       walk: ["\n\n ahe m eha\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\n\nah e m eha\n"],
       hop: ["\n\n ahe m eha\n", "\nahe m e ha\n\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\nah e m eha\n\n", "\n\nah e m eha\n"],
     }
 
-    attr_accessor :action, :mood
+    attr_accessor :mood
+    attr_reader :action
 
     def initialize(hatching:, mood:, action: :walk)
       @frame = 0
@@ -39,7 +42,7 @@ module Petli
       food_peices = self.food.split('')
 
       ANIMATIONS[self.action][self.frame]
-        .sub('a', leftarm).sub('a', rightarm)
+        .sub('a', leftarm.to_s).sub('a', rightarm.to_s)
         .sub('h', lefthead).sub('h', righthead)
         .sub('e', lefteye).sub('e', righteye)
         .sub('m', mouth)
@@ -57,8 +60,23 @@ module Petli
       @on_complete = block
     end
 
+    def celebrate
+      @action_stack = [:stand, :stand, :stand, :stand]
+      @mood_stack = [:mezmerized, :mezmerized, :mezmerized, :mezmerized]
+    end
+
+    def embarass
+      @action_stack = [:stand, :stand, :stand, :stand]
+      @mood_stack = [:embarassed, :embarassed, :embarassed, :embarassed]
+    end
+
     def busy?
       @busy
+    end
+
+    def action=(act)
+      @action = act
+      @frame = 0
     end
 
     private

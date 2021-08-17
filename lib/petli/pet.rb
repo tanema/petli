@@ -24,6 +24,10 @@ module Petli
       )
     end
 
+    def reset
+      @animation.action = :walk
+    end
+
     def display
       if hours_since(self.last_meal) > 1
         hours_past = hours_since(self.last_meal)
@@ -59,12 +63,21 @@ module Petli
       end
     end
 
+    def win
+      self.happiness = [10, self.happiness+1].min
+    end
+
+    def lose
+      # todo I dont really want it to become more unhappy if they lose
+    end
+
     def play(game: :dice)
       self.last_play = Time.now
+      @animation.action = :stand
     end
 
     def poop
-      self.poops << Poop.new(*POOP::LOCATIONS[self.poops.count]) if self.poops.count < POOP::LOCATIONS.count
+      self.poops << Poop.new(*Poop::LOCATIONS[self.poops.count]) if self.poops.count < Poop::LOCATIONS.count
     end
 
     def clean
@@ -75,9 +88,16 @@ module Petli
       @animation.busy?
     end
 
+    def celebrate
+      @animation.celebrate
+    end
+
+    def embarass
+      @animation.embarass
+    end
+
     def lifetime
       days_since(self.birth).to_i
     end
   end
 end
-
