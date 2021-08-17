@@ -63,11 +63,13 @@ module Petli
     def celebrate
       @action_stack = [:stand, :stand, :stand, :stand]
       @mood_stack = [:mezmerized, :mezmerized, :mezmerized, :mezmerized]
+      @frame = 0
     end
 
     def embarass
       @action_stack = [:stand, :stand, :stand, :stand]
       @mood_stack = [:embarassed, :embarassed, :embarassed, :embarassed]
+      @frame = 0
     end
 
     def busy?

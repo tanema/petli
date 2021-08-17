@@ -10,7 +10,6 @@ module Petli
     db_attr :health, default: 5
     db_attr :mood, default: :normal
     db_attr :happiness, default: 5
-    db_attr :discipline, default: 5
     db_attr :sick, default: 0
     db_attr :last_play, default: Time.now
     db_attr :last_meal, default: Time.now
@@ -39,8 +38,11 @@ module Petli
       end
 
       if hours_since(self.last_play) > 3
-        self.happiness = [1, self.happiness-1].max
+        hours_past = hours_since(self.last_play)
         self.last_play = Time.now
+        (0...hours_past).each do
+          self.happiness = [1, self.happiness-1].max
+        end
       end
 
       self.happiness = [self.happiness, 5].min if self.health <= 3
@@ -52,13 +54,11 @@ module Petli
     end
 
     def feed(food: :bread)
+      return self.embarass if ((food == :medicine && self.sick <= 0) || (self.health == 10 && food != :medicine))
       self.last_meal = Time.now unless food == :medicine
       @animation.eat(food: food) do
         self.health = [10, self.health+1].min unless food == :medicine
-        if food == :candy
-          self.discipline = [1, self.discipline-0.3].max
-          self.happiness = [10, self.happiness+1].min
-        end
+        self.happiness = [10, self.happiness+1].min if food == :candy
         self.sick = [0, self.sick - 1].max if food == :medicine
       end
     end
