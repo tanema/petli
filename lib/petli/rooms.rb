@@ -24,6 +24,7 @@ module Petli
       end
 
       def action_bar
+        return "" if @pet.dead?
         self.actions.map {|a| "[#{a[0]}]#{a[1..]}"}.join(" ")
       end
 

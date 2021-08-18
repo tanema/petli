@@ -1,16 +1,16 @@
 module Petli
   class Pet
-    require 'time'
     include Watch
     extend DB::Attributes
 
     MOOD_SCALE = [:angry, :annoyed, :normal, :happy, :great]
 
-    db_attr :birth, default: Time.now.to_s, readonly: true
+    db_attr :birth, default: Time.now, readonly: true
     db_attr :health, default: 5
     db_attr :mood, default: :normal
     db_attr :happiness, default: 5
     db_attr :sick, default: 0
+    db_attr :died_at
     db_attr :last_play, default: Time.now
     db_attr :last_meal, default: Time.now
     db_attr :poops, default: []
@@ -20,6 +20,7 @@ module Petli
       @animation = Animator.new(
         hatching: (Time.now - Time.parse(self.birth)) < 10,
         mood: self.mood,
+        action: self.died_at.nil? ? :walk : :death
       )
     end
 
@@ -28,12 +29,15 @@ module Petli
     end
 
     def display
+      return @animation.step if self.dead?
+
       if hours_since(self.last_meal) > 1
         hours_past = hours_since(self.last_meal)
         self.last_meal = Time.now
-        (0...hours_past).each do
+        (0...hours_past).each do |i|
           self.health = [1, self.health-1].max
-          self.poop if rand <= 0.3
+          self.happiness = [1, self.happiness-1].max
+          self.poop(hours_past - i) if rand <= 0.3
         end
       end
 
@@ -49,8 +53,22 @@ module Petli
       self.sick = self.poops.filter{|poop| hours_since(poop.hatch) > 1 }.count
       self.mood = MOOD_SCALE[((self.happiness.to_f/10.0)*(MOOD_SCALE.count - 1)).floor ]
 
+      self.check_if_dead
+
       @animation.mood = self.sick > 0 ? :sick : self.mood
       @animation.step
+    end
+
+    def check_if_dead
+      not_happy = self.happiness <= 1
+      not_healthy = self.health <= 1
+      is_sick = self.sick > 2
+      too_much_time = days_since(self.last_meal) >= 1
+
+      if not_happy && not_healthy && (is_sick || too_much_time)
+        self.died_at = Time.now
+        @animation.action = :death
+      end
     end
 
     def feed(food: :bread)
@@ -76,8 +94,8 @@ module Petli
       @animation.action = :stand
     end
 
-    def poop
-      self.poops << Poop.new(*Poop::LOCATIONS[self.poops.count]) if self.poops.count < Poop::LOCATIONS.count
+    def poop(hours_ago)
+      self.poops << Poop.new(hours_ago, *Poop::LOCATIONS[self.poops.count]) if self.poops.count < Poop::LOCATIONS.count
     end
 
     def clean
@@ -86,6 +104,10 @@ module Petli
 
     def busy?
       @animation.busy?
+    end
+
+    def dead?
+      @animation.action == :death
     end
 
     def celebrate

@@ -13,7 +13,7 @@ module Petli
 
     def keypress(event)
       exit if event.value == "q"
-      return if @pet.busy?
+      return if @pet.busy? || @pet.dead?
       Rooms.current.keypress(event)
     end
 

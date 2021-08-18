@@ -12,9 +12,10 @@ module Petli
       eat: ["\n\nahe m eha fff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha  ff\n", "\n\nahe m eha   f\n", "\n\nahe m eha   f\n", "\n\nahe m eha\n"],
       walk: ["\n\n ahe m eha\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\n\nah e m eha\n"],
       hop: ["\n\n ahe m eha\n", "\nahe m e ha\n\n", "\n\nahe m e ha\n", "\n\nahe m eha\n", "\nah e m eha\n\n", "\n\nah e m eha\n"],
+      death: ["  ┌───┐ \n  │ ☠ │ \n  │   │ \n ```````", "  ┌───┐ \n  │ ☠ │ \n  │   │ \n '''''''"],
     }
 
-    attr_accessor :mood
+    attr_writer :mood
     attr_reader :action
 
     def initialize(hatching:, mood:, action: :walk)
@@ -81,6 +82,14 @@ module Petli
       @frame = 0
     end
 
+    def action
+      @action_stack.count > 0 ? @action_stack[0] : @action
+    end
+
+    def mood
+      @mood_stack.count > 0 ? @mood_stack[0] : @mood
+    end
+
     private
 
     def add_frame
@@ -104,14 +113,6 @@ module Petli
 
     def frame # to control framerate
       (@frame/3).ceil
-    end
-
-    def action
-      @action_stack.count > 0 ? @action_stack[0] : @action
-    end
-
-    def mood
-      @mood_stack.count > 0 ? @mood_stack[0] : @mood
     end
 
     def getit(part, vals=1)
