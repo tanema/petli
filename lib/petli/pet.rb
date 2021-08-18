@@ -119,7 +119,11 @@ module Petli
     end
 
     def lifetime
-      days_since(self.birth).to_i
+      if self.died_at.nil?
+        days_since(self.birth).to_i
+      else
+        days_since(self.birth, self.died_at).to_i
+      end
     end
   end
 end

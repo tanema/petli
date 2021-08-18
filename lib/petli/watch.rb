@@ -7,8 +7,8 @@ module Petli
     require 'time'
     private
 
-    def days_since(last)
-      time_elapsed(last, DAYS_DIV)
+    def days_since(last, now=Time.now)
+      time_elapsed(last, DAYS_DIV, now)
     end
 
     def hours_since(last)
