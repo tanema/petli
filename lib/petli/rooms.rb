@@ -32,9 +32,11 @@ module Petli
       end
 
       def draw(ctx, ox, oy)
-        @pet.poops.each do |poop|
+        poops = @pet.poops
+        poops.each do |poop|
           ctx.render_at(ox+1+poop.x, oy+1+poop.y, poop.step)
         end
+        @pet.poops = poops
         ctx.render_at(ox+9, oy+4, @pet.display)
         ctx.render_at(ox+9, oy+3, "[#{'!'*@pet.sick}SICK#{'!'*@pet.sick}]") if @pet.sick > 0
       end

@@ -5,6 +5,5 @@ module Petli
   autoload :Pet, "petli/pet"
   autoload :Poop, "petli/poop"
   autoload :Rooms, "petli/rooms"
-  autoload :SimpleAnimation, "petli/simple_animation"
   autoload :Watch, "petli/watch"
 end

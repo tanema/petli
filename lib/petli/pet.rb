@@ -18,7 +18,7 @@ module Petli
     def initialize
       super()
       @animation = Animator.new(
-        hatching: (Time.now - Time.parse(self.birth)) < 10,
+        hatching: (Time.now - self.birth) < 10,
         mood: self.mood,
         action: self.died_at.nil? ? :walk : :death
       )
@@ -31,17 +31,18 @@ module Petli
     def display
       return @animation.step if self.dead?
 
-      if hours_since(self.last_meal) > 1
+      if mins_since(self.last_meal) > 1
         hours_past = hours_since(self.last_meal)
         self.last_meal = Time.now
         (0...hours_past).each do |i|
           self.health = [1, self.health-1].max
           self.happiness = [1, self.happiness-1].max
-          self.poop(hours_past - i) if rand <= 0.3
+          self.poop(hours_past - i) if rand <= 0.5
         end
+        self.sick = self.poops.filter{|poop| hours_since(poop.hatch) > 1 }.count
       end
 
-      if hours_since(self.last_play) > 3
+      if hours_since(self.last_play) > 1
         hours_past = hours_since(self.last_play)
         self.last_play = Time.now
         (0...hours_past).each do
@@ -50,7 +51,6 @@ module Petli
       end
 
       self.happiness = [self.happiness, 5].min if self.health <= 3
-      self.sick = self.poops.filter{|poop| hours_since(poop.hatch) > 1 }.count
       self.mood = MOOD_SCALE[((self.happiness.to_f/10.0)*(MOOD_SCALE.count - 1)).floor ]
 
       self.check_if_dead
