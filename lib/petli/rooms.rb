@@ -38,7 +38,7 @@ module Petli
         end
         @pet.poops = poops
         ctx.render_at(ox+9, oy+4, @pet.display)
-        ctx.render_at(ox+9, oy+3, "[#{'!'*@pet.sick}SICK#{'!'*@pet.sick}]") if @pet.sick > 0
+        ctx.render_at(ox+9, oy+4, "[#{'!'*@pet.sick}SICK#{'!'*@pet.sick}]") if @pet.sick > 0
       end
     end
 

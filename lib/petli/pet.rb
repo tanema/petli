@@ -31,13 +31,13 @@ module Petli
     def display
       return @animation.step if self.dead?
 
-      if mins_since(self.last_meal) > 1
+      if hours_since(self.last_meal) > 1
         hours_past = hours_since(self.last_meal)
         self.last_meal = Time.now
         (0...hours_past).each do |i|
           self.health = [1, self.health-1].max
           self.happiness = [1, self.happiness-1].max
-          self.poop(hours_past - i) if rand <= 0.5
+          self.poop(hours_past - i) if rand <= 0.8
         end
         self.sick = self.poops.filter{|poop| hours_since(poop.hatch) > 1 }.count
       end
@@ -95,7 +95,7 @@ module Petli
     end
 
     def poop(hours_ago)
-      self.poops << Poop.new(hours_ago, *Poop::LOCATIONS[self.poops.count]) if self.poops.count < Poop::LOCATIONS.count
+      self.poops = self.poops + [Poop.new(hours_ago, *Poop::LOCATIONS[self.poops.count])] if self.poops.count < Poop::LOCATIONS.count
     end
 
     def clean
