@@ -1,3 +1,34 @@
 #!/usr/bin/env ruby
 require_relative './app'
-Petli::HUD.new.run
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: petli [options]"
+  opts.on("-r", "--reset", "Reset button to start over again") {|v| options[:reset] = v }
+  opts.on("-s", "--status", "Dump pet status") {|v| options[:status] = v}
+  opts.on("-b", "--bread", "Feed your pet bread without viewing") {|v| options[:bread] = v}
+  opts.on("-c", "--candy", "Feed your pet candy without viewing") {|v| options[:candy] = v}
+  opts.on("-m", "--medicine", "Feed your pet candy without viewing") {|v| options[:medicine] = v}
+  opts.on("-l", "--clean", "Clean up any 'dirt' without viewing") {|v| options[:clean] = v}
+end.parse!
+
+pet = Petli::Pet.new
+pet.display # force pet to update first
+
+if options[:reset]
+  Petli::DB.clear
+  puts "Goodbye. I hope you love your next pet!"
+elsif options[:status]
+  puts Petli::DB.dump
+elsif options[:bread]
+  pet.feed(food: :bread)
+elsif options[:candy]
+  pet.feed(food: :candy)
+elsif options[:medicine]
+  pet.feed(food: :medicine)
+elsif options[:clean]
+  pet.clean
+else
+  Petli::HUD.new.run
+end

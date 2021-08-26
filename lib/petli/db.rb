@@ -12,7 +12,7 @@ module Petli
     end
 
     extend SingleForwardable
-    def_delegators :new, :keys, :exists?, :set, :get, :del, :clear
+    def_delegators :new, :keys, :exists?, :set, :get, :del, :clear, :dump
 
     attr_reader :db
 
@@ -35,12 +35,8 @@ module Petli
     end
 
     def get(key, default=nil)
-      val = db.transaction(true) { db[key] }
-      if val.nil?
-        val = default unless default.nil?
-        val = yield if block_given?
-        db.transaction { db[key] = val }
-      end
+      val = db.transaction(true) { db.fetch(key, default) }
+      val = db.transaction { db[key] = yield } if val.nil? && block_given?
       val
     end
 
@@ -50,6 +46,16 @@ module Petli
 
     def clear
       del(*keys)
+    end
+
+    def dump
+      require 'json'
+      begin
+        file = File.new(@db.path, mode: IO::RDONLY | IO::BINARY, encoding: Encoding::ASCII_8BIT)
+        JSON.dump(Marshal::load(file.read))
+      ensure
+        file.close
+      end
     end
   end
 end

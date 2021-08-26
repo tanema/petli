@@ -33,12 +33,16 @@ module Petli
 
       def draw(ctx, ox, oy)
         poops = @pet.poops
-        poops.each do |poop|
-          ctx.render_at(ox+1+poop.x, oy+1+poop.y, poop.step)
+        poops.each_with_index do |poop, i|
+          x, y = Poop::LOCATIONS[i]
+          ctx.render_at(ox+1+x, oy+1+y, poop.step)
         end
         @pet.poops = poops
         ctx.render_at(ox+9, oy+4, @pet.display)
-        ctx.render_at(ox+9, oy+4, "[#{'!'*@pet.sick}SICK#{'!'*@pet.sick}]") if @pet.sick > 0
+        sick = @pet.sick
+        if sick > 0 && !@pet.dead?
+          ctx.render_at(ox+11-sick, oy+4, "[#{'!'*sick}SICK#{'!'*sick}]")
+        end
       end
     end
 
