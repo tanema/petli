@@ -75,10 +75,14 @@ module Petli
       return self.embarass if ((food == :medicine && self.sick <= 0) || (self.health == 10 && food != :medicine))
       self.last_meal = Time.now unless food == :medicine
       @animation.eat(food: food) do
-        self.health = [10, self.health+1].min unless food == :medicine
-        self.happiness = [10, self.happiness+1].min if food == :candy
-        self.sick = [0, self.sick - 1].max if food == :medicine
+        self.feed!(food)
       end
+    end
+
+    def feed!(food: :bread)
+      self.health = [10, self.health+1].min unless food == :medicine
+      self.happiness = [10, self.happiness+1].min if food == :candy
+      self.sick = [0, self.sick - 1].max if food == :medicine
     end
 
     def win
@@ -95,7 +99,7 @@ module Petli
     end
 
     def poop(hours_ago)
-      self.poops = self.poops + [Poop.new(hours_ago, *Poop::LOCATIONS[self.poops.count])] if self.poops.count < Poop::LOCATIONS.count
+      self.poops = self.poops + [Poop.new(hours_ago)] if self.poops.count < Poop::LOCATIONS.count
     end
 
     def clean

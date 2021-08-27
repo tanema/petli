@@ -25,11 +25,11 @@ if options[:reset]
 elsif options[:status]
   puts Petli::DB.dump
 elsif options[:bread]
-  pet.feed(food: :bread)
+  pet.feed!(food: :bread)
 elsif options[:candy]
-  pet.feed(food: :candy)
+  pet.feed!(food: :candy)
 elsif options[:medicine]
-  pet.feed(food: :medicine)
+  pet.feed!(food: :medicine)
 elsif options[:clean]
   pet.clean
 else

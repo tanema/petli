@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 $:.unshift File.expand_path('../lib', __FILE__)
-require 'petli/version'
+require 'petli'
 
 Gem::Specification.new do |s|
   s.name          = 'petli'
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 2.6"
 
+  s.add_dependency("pastel", "~> 0.8.0")
   s.add_dependency("tty-cursor", "~> 0.7.1")
   s.add_dependency("tty-config", "~> 0.5.0")
   s.add_dependency("tty-screen", "~> 0.8.1")

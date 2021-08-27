@@ -25,7 +25,11 @@ module Petli
 
       def action_bar
         return "" if @pet.dead?
-        self.actions.map {|a| "[#{a[0]}]#{a[1..]}"}.join(" ")
+        p = Pastel.new
+        self.actions.map do |a|
+          key = p.bold("[#{a[0].capitalize}]")
+          "#{key}#{a[1..]}"
+        end.join(" ")
       end
 
       def keypress(event)

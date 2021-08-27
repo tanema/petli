@@ -1,4 +1,5 @@
 require_relative '../tatty/game'
+require 'pastel'
 
 module Petli
   class HUD < Tatty::Game
@@ -22,8 +23,8 @@ module Petli
       left, top = ((w-GAME_WIDTH)/2).round, ((h-GAME_HEIGHT)/2).round
       render_box(
         title: {
-          top_left: " Petli ",
-          bottom_right: " #{@pet.lifetime} days ",
+          top_left: Pastel.new.bright_white.bold(" Petli "),
+          bottom_right: Pastel.new.green(" #{@pet.lifetime} days "),
         },
         width: GAME_WIDTH,
         height: GAME_HEIGHT,
@@ -36,7 +37,8 @@ module Petli
     end
 
     def status_bar
-      "#{"♥"*@pet.health}#{"♡"*(10-@pet.health)}      #{"☺"*(10-@pet.happiness)}#{"☻"*@pet.happiness}"
+      p = Pastel.new
+      "#{p.red("♥")*@pet.health}#{"♡"*(10-@pet.health)}      #{"☺"*(10-@pet.happiness)}#{p.green("☻")*@pet.happiness}"
     end
   end
 end
