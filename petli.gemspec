@@ -16,8 +16,11 @@ Gem::Specification.new do |s|
     A virtual pet that will live in your command line!
   HERE
   s.post_install_message = <<~HERE
+
     I am so happy to meet you!
-    ʕ=ʔ 乁(☯ ᴥ ☯)ㄏ ▷☯◁
+
+       ʕ=ʔ 乁(☯ ᴥ ☯)ㄏ ▷☯◁
+
   HERE
   s.metadata      = { "source_code_uri" => "https://github.com/tanema/petli" }
 
