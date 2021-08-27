@@ -10,5 +10,7 @@ This is a little pet that will live in your console. You must feed it, clean up 
 ### Running the app
 
 ```bash
-bundle install && ./pet
+$> bundle install
+$> rake install
+$> petli
 ```

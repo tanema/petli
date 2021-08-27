@@ -6,4 +6,5 @@ module Petli
   autoload :Poop, "petli/poop"
   autoload :Rooms, "petli/rooms"
   autoload :Watch, "petli/watch"
+  autoload :Version, "petli/version"
 end

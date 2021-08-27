@@ -1,6 +1,8 @@
 module Petli
   require "pstore"
   require "forwardable"
+  require "tty-platform"
+  require 'fileutils'
 
   class DB
     module Attributes
@@ -17,7 +19,17 @@ module Petli
     attr_reader :db
 
     def initialize(path: "petli.pet")
-      @db = PStore.new(path)
+      config_path = if !$petlidboverride.nil?
+          $petlidboverride
+        elsif TTY::Platform.windows?
+          File.join(ENV["APPDATA"], 'petli', 'data.pet')
+        elsif TTY::Platform.linux?
+          File.join(ENV["XDG_CONFIG_DIRS"] || '/etc/xdg', 'petli', 'data.pet')
+        elsif TTY::Platform.mac?
+          File.join(File.expand_path('~/Library/Application Support'), 'petli', 'data.pet')
+        end
+      FileUtils.mkdir_p(File.dirname(config_path))
+      @db = PStore.new(config_path)
     end
 
     def keys
@@ -35,8 +47,12 @@ module Petli
     end
 
     def get(key, default=nil)
-      val = db.transaction(true) { db.fetch(key, default) }
-      val = db.transaction { db[key] = yield } if val.nil? && block_given?
+      val = db.transaction(true) { db[key] }
+      if val.nil?
+        val = default unless default.nil?
+        val = yield if block_given?
+        db.transaction { db[key] = val }
+      end
       val
     end
 

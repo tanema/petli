@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative './app'
+require 'petli'
 require 'optparse'
 
 options = {}
@@ -11,6 +11,9 @@ OptionParser.new do |opts|
   opts.on("-c", "--candy", "Feed your pet candy without viewing") {|v| options[:candy] = v}
   opts.on("-m", "--medicine", "Feed your pet candy without viewing") {|v| options[:medicine] = v}
   opts.on("-l", "--clean", "Clean up any 'dirt' without viewing") {|v| options[:clean] = v}
+  opts.on("-p", "--path [PATH]", "path to your pet data (defaults to system config dir)") do |v|
+    $petlidboverride = v
+  end
 end.parse!
 
 pet = Petli::Pet.new
