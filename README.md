@@ -9,7 +9,13 @@ This is a little pet that will live in your console. You must feed it, clean up 
 
 ### Running the app
 
+Run `gem install petli` and then run `petli` in your command line
+
+### Development
+
 ```bash
+$> git clone git@github.com:tanema/petli.git
+$> cd petli
 $> bundle install
 $> rake install
 $> petli
