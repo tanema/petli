@@ -1,7 +1,7 @@
 module Petli
   class Pet
     include Watch
-    extend DB::Attributes
+    extend Tatty::DB::Attributes
 
     MOOD_SCALE = [:angry, :annoyed, :normal, :happy, :great]
 
@@ -35,17 +35,19 @@ module Petli
         hours_past = hours_since(self.last_meal)
         self.last_meal = Time.now
         (0...hours_past).each do |i|
+          next if rand <= 0.3
           self.health = [1, self.health-1].max
           self.happiness = [1, self.happiness-1].max
-          self.poop(hours_past - i) if rand <= 0.8
+          self.poops << hours_ago(hrsago) if rand <= 0.8 && self.poops.count < Poop::LOCATIONS.count
         end
-        self.sick = self.poops.filter{|poop| hours_since(poop.hatch) > 1 }.count
+        self.sick = self.poops.filter{|poop| hours_since(poop) > 1 }.count
       end
 
       if hours_since(self.last_play) > 1
         hours_past = hours_since(self.last_play)
         self.last_play = Time.now
         (0...hours_past).each do
+          next if rand <= 0.3
           self.happiness = [1, self.happiness-1].max
         end
       end
@@ -75,7 +77,7 @@ module Petli
       return self.embarass if ((food == :medicine && self.sick <= 0) || (self.health == 10 && food != :medicine))
       self.last_meal = Time.now unless food == :medicine
       @animation.eat(food: food) do
-        self.feed!(food)
+        self.feed!(food: food)
       end
     end
 
@@ -96,10 +98,6 @@ module Petli
     def play(game: :dice)
       self.last_play = Time.now
       @animation.action = :stand
-    end
-
-    def poop(hours_ago)
-      self.poops = self.poops + [Poop.new(hours_ago)] if self.poops.count < Poop::LOCATIONS.count
     end
 
     def clean

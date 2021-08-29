@@ -5,6 +5,7 @@ module Petli
 
       def initialize(pet)
         @pet = pet
+        @poop = Poop.new
       end
 
       def enter
@@ -36,12 +37,12 @@ module Petli
       end
 
       def draw(ctx, ox, oy)
-        poops = @pet.poops
-        poops.each_with_index do |poop, i|
+        poop = @poop.step
+        @pet.poops.each_with_index do |_, i|
           x, y = Poop::LOCATIONS[i]
-          ctx.render_at(ox+1+x, oy+1+y, poop.step)
+          ctx.render_at(ox+1+x, oy+1+y, poop)
         end
-        @pet.poops = poops
+
         ctx.render_at(ox+9, oy+4, @pet.display)
         sick = @pet.sick
         if sick > 0 && !@pet.dead?

@@ -1,4 +1,4 @@
-module Petli
+module Tatty
   require "pstore"
   require "forwardable"
   require "tty-platform"
@@ -18,9 +18,9 @@ module Petli
 
     attr_reader :db
 
-    def initialize(path: "petli.pet")
-      config_path = if !$petlidboverride.nil?
-          $petlidboverride
+    def initialize
+      config_path = if !$tattydboverridepath.nil?
+          $tattydboverridepath
         elsif TTY::Platform.windows?
           File.join(ENV["APPDATA"], 'petli', 'data.pet')
         elsif TTY::Platform.linux?
@@ -75,4 +75,3 @@ module Petli
     end
   end
 end
-

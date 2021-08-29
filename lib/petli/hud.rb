@@ -1,4 +1,3 @@
-require_relative '../tatty/game'
 require 'pastel'
 
 module Petli
@@ -13,7 +12,7 @@ module Petli
     end
 
     def keypress(event)
-      exit if event.value == "q"
+      exit if event.value == "q" || event.value == "\e" || event.value == "x"
       return if @pet.busy? || @pet.dead?
       Rooms.current.keypress(event)
     end
@@ -21,10 +20,11 @@ module Petli
     def draw
       h, w = self.screen_size
       left, top = ((w-GAME_WIDTH)/2).round, ((h-GAME_HEIGHT)/2).round
+      p = Pastel.new
       render_box(
         title: {
-          top_left: Pastel.new.bright_white.bold(" Petli "),
-          bottom_right: Pastel.new.green(" #{@pet.lifetime} days "),
+          top_left: p.bright_white.bold(" Petli "),
+          bottom_right: p.green(" #{@pet.lifetime} days "),
         },
         width: GAME_WIDTH,
         height: GAME_HEIGHT,
@@ -34,6 +34,7 @@ module Petli
       Rooms.current.draw(self, left, top)
       render_at(left+1, top+1, status_bar)
       render_at(left+1, top+GAME_HEIGHT-2, Rooms.current.action_bar)
+      render_at(left+GAME_WIDTH-2, top, p.bright_white.bold("[x]"))
     end
 
     def status_bar

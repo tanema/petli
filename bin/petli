@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'petli'
+require 'tatty'
 require 'optparse'
 
 options = {}
@@ -12,7 +13,7 @@ OptionParser.new do |opts|
   opts.on("-m", "--medicine", "Feed your pet candy without viewing") {|v| options[:medicine] = v}
   opts.on("-l", "--clean", "Clean up any 'dirt' without viewing") {|v| options[:clean] = v}
   opts.on("-p", "--path [PATH]", "path to your pet data (defaults to system config dir)") do |v|
-    $petlidboverride = v
+    $tattydboverridepath = v
   end
 end.parse!
 
@@ -20,10 +21,10 @@ pet = Petli::Pet.new
 pet.display # force pet to update first
 
 if options[:reset]
-  Petli::DB.clear
+  Tatty::DB.clear
   puts "Goodbye. I hope you love your next pet!"
 elsif options[:status]
-  puts Petli::DB.dump
+  puts Tatty::DB.dump
 elsif options[:bread]
   pet.feed!(food: :bread)
 elsif options[:candy]
