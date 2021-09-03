@@ -32,14 +32,9 @@ module Petli
         top: top,
       )
       Rooms.current.draw(self, left, top)
-      render_at(left+1, top+1, status_bar)
+      render_at(left+1, top+1, "#{p.red("♥")*@pet.health}#{"♡"*(10-@pet.health)}      #{"☺"*(10-@pet.happiness)}#{p.green("☻")*@pet.happiness}")
       render_at(left+1, top+GAME_HEIGHT-2, Rooms.current.action_bar)
       render_at(left+GAME_WIDTH-2, top, p.bright_white.bold("[x]"))
-    end
-
-    def status_bar
-      p = Pastel.new
-      "#{p.red("♥")*@pet.health}#{"♡"*(10-@pet.health)}      #{"☺"*(10-@pet.happiness)}#{p.green("☻")*@pet.happiness}"
     end
   end
 end

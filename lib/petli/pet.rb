@@ -38,7 +38,7 @@ module Petli
           next if rand <= 0.3
           self.health = [1, self.health-1].max
           self.happiness = [1, self.happiness-1].max
-          self.poops << hours_ago(hrsago) if rand <= 0.8 && self.poops.count < Poop::LOCATIONS.count
+          self.poops << hours_ago(i) if rand <= 0.8 && self.poops.count < Poop::LOCATIONS.count
         end
         self.sick = self.poops.filter{|poop| hours_since(poop) > 1 }.count
       end
