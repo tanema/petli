@@ -34,5 +34,5 @@ elsif options[:medicine]
 elsif options[:clean]
   pet.clean
 else
-  Petli::HUD.new.run
+  Tatty.run(Petli::Stages::Main, pet: pet)
 end

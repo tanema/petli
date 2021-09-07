@@ -3,7 +3,7 @@ module Petli
   autoload :HUD, "petli/hud"
   autoload :Pet, "petli/pet"
   autoload :Poop, "petli/poop"
-  autoload :Rooms, "petli/rooms"
+  autoload :Stages, "petli/Stages"
   autoload :Watch, "petli/watch"
   autoload :VERSION, "petli/version"
 end

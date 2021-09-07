@@ -33,7 +33,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency("pastel", "~> 0.8.0")
   s.add_dependency("tty-cursor", "~> 0.7.1")
-  s.add_dependency("tty-config", "~> 0.5.0")
   s.add_dependency("tty-screen", "~> 0.8.1")
   s.add_dependency("tty-reader", "~> 0.9.0")
   s.add_dependency("tty-color", "~> 0.6.0")

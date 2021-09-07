@@ -1,11 +1,11 @@
 module Petli
-  module Rooms
-    class Feed < Room
+  module Stages
+    class Feed < Base
       def actions
         %w(bread snack med)
       end
 
-      def keypress(event)
+      def onkey(event)
         if event.value == "b"
           @pet.feed(food: :bread)
         elsif event.value == "s"
@@ -13,7 +13,7 @@ module Petli
         elsif event.value == "m"
           @pet.feed(food: :medicine)
         end
-        goto("main")
+        goto(Main, pet: @pet)
       end
     end
   end
