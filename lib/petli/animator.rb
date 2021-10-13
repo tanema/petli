@@ -33,16 +33,16 @@ module Petli
     end
 
     def step
-      self.add_frame
+      add_frame
       leftarm, rightarm = getit(:arms, 2)
       lefteye, righteye = getit(:eyes, 2)
       mouth = getit(:mouth)
       lefthead, righthead = getit(:head, 2)
       [leftarm,lefthead,lefteye,mouth,righteye,righthead,rightarm]
 
-      food_peices = self.food.split('')
+      food_peices = food.split('')
 
-      ANIMATIONS[self.action][self.frame]
+      ANIMATIONS[action][frame]
         .sub('a', leftarm.to_s).sub('a', rightarm.to_s)
         .sub('h', lefthead).sub('h', righthead)
         .sub('e', lefteye).sub('e', righteye)
@@ -93,9 +93,9 @@ module Petli
     private
 
     def add_frame
-      frame_count = ANIMATIONS[self.action].count
+      frame_count = ANIMATIONS[action].count
       @frame += 1
-      if self.frame == frame_count
+      if frame == frame_count
         @frame = 0
         @action_stack.shift if @action_stack.count > 0
         @mood_stack.shift if @mood_stack.count > 0
@@ -108,7 +108,7 @@ module Petli
     end
 
     def food
-      self.data[@food]
+      data[@food]
     end
 
     def frame # to control framerate
@@ -116,8 +116,8 @@ module Petli
     end
 
     def getit(part, vals=1)
-      mood_part = self.data[part][self.mood] || self.data[part][:default]
-      part_frame = self.frame % mood_part.count
+      mood_part = data[part][mood] || data[part][:default]
+      part_frame = frame % mood_part.count
       result = mood_part[part_frame]
       if vals == 2 && result.is_a?(String)
         [result, result]
