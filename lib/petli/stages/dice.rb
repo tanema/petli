@@ -30,7 +30,7 @@ module Petli
         @pick = (1..6).to_a.sample
         @won = (event.value == "h" && @pick > @value) || (event.value == "l" && @pick < @value)
         @won ? @pet.celebrate : @pet.embarass
-        @countdown = 20
+        @countdown = 10
       end
 
       def draw

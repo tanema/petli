@@ -24,7 +24,7 @@ module Petli
         @petpickedleft = rand(1..2) == 1
         @pickedleft = event.value == "l"
         (@petpickedleft == @pickedleft) ? @pet.celebrate : @pet.embarass
-        @countdown = 20
+        @countdown = 10
       end
 
       def draw

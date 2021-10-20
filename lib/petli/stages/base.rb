@@ -18,9 +18,6 @@ module Petli
         onkey(event)
       end
 
-      def onkey(event)
-      end
-
       def actions
         %w()
       end
