@@ -9,7 +9,7 @@ module Petli
       def initialize(pet:)
         super()
         @pet = pet
-        @poop = Poop.new
+        @poop = Tatty::Anim.from_atlas('./data/poop.txtanim')
       end
 
       def keypress(event)
@@ -26,7 +26,7 @@ module Petli
       end
 
       def action_bar
-        return "" if @pet.dead?
+        return "" if @pet.dead? || @pet.busy?
         p = Pastel.new
         self.actions.map do |a|
           key = p.bold("[#{a[0].capitalize}]")
@@ -55,9 +55,9 @@ module Petli
           top: top,
         )
 
-        poop = @poop.step
+        poop = @poop.next
         @pet.poops.each_with_index do |_, i|
-          x, y = Poop::LOCATIONS[i]
+          x, y = POOP_LOCATIONS[i]
           render_at(left+1+x, top+1+y, poop)
         end
 

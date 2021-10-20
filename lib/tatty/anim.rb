@@ -1,18 +1,47 @@
 module Tatty
   class Anim
-    def initialize(atlas, frame: 0, rate: 2)
+    attr_reader :width, :height, :loop, :rate, :name
+
+    def self.from_atlas(filepath, name: :default)
+      Atlas.new(filepath)[name]
+    end
+
+    def initialize(atlas, **kargs)
       @atlas = atlas
-      @frame = frame
-      @rate = rate
+      @rate = kargs[:speed] || 2
+      @loop = kargs[:loop] || false
+      @name = kargs[:name]
+      @width = kargs[:width]
+      @height = kargs[:height]
+      reset
+    end
+
+    def reset
+      @frame = 0
     end
 
     def step
       @frame += 1
-      @frame = 0 if self.frame >= @atlas.count
-      @atlas[self.frame]
+      if rate_frame >= @atlas.count
+        reset if @loop
+        true
+      else
+        false
+      end
     end
 
-    def frame
+    def display
+      @atlas[rate_frame]
+    end
+
+    def next
+      step
+      display
+    end
+
+    private
+
+    def rate_frame
       (@frame/@rate).ceil
     end
   end

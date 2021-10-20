@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 require 'irb'
 require 'irb/completion'
-require_relative '../lib/petli'
+require_relative './bootstrap'
 IRB.start

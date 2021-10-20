@@ -3,6 +3,7 @@ module Tatty
   require 'tty-cursor'
 
   autoload :Anim, "tatty/anim"
+  autoload :Atlas, "tatty/atlas"
   autoload :DB, "tatty/db"
   autoload :Stage, "tatty/stage"
 

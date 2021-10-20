@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+require_relative './bootstrap'
+require 'optparse'
+
+class Animate < Tatty::Stage
+  def initialize(animation:)
+    super()
+    @animation = animation
+  end
+
+  def keypress(event)
+    exit if event.value == "q" || event.value == "\e" || event.value == "x"
+  end
+
+  def draw
+    done = @animation.step
+    @animation.reset if !@animation.loop and done
+    render_at(0, 0, @animation.display)
+  end
+end
+
+animation = Tatty::Anim.from_atlas(ARGV[0], name: ARGV[1])
+if animation.nil?
+  puts "Cannot find animation #{ARGV[1]}"
+else
+  Tatty.run(Animate, animation: animation)
+end

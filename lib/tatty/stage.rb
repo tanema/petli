@@ -19,6 +19,9 @@ module Tatty
       ::Tatty.goto(klass, **kargs)
     end
 
+    def keypress(evt)
+    end
+
     def screen_size
       TTY::Screen.size
     end
