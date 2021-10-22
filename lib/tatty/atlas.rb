@@ -18,13 +18,17 @@ module Tatty
       chunks = File.read(@filepath).split(/^---.*$/)
       shouldBeYaml = true
       default_config = {name: :default}.merge(parse_yaml(chunks.first))
+      default_config.delete(:alias)
       config = {}
       chunks.each do |chunk|
         if shouldBeYaml
           config = default_config.merge(parse_yaml(chunk))
         else
           validate_config(config)
-          @sheet[config[:name].to_sym] = Anim.new(parse_animation(chunk, config), **config)
+          animation = Anim.new(parse_animation(chunk, config), **config)
+          ([config[:name]] + Array(config[:alias])).map(&:to_sym).each do |name|
+            @sheet[name] = animation
+          end
         end
         shouldBeYaml = !shouldBeYaml
       end
@@ -43,6 +47,8 @@ module Tatty
 
     def parse_yaml(chunk)
       YAML.load(chunk).each_with_object({}) { |(k,v), h| h[k.to_sym] = v }
+    rescue
+      raise "unable to parse chunk #{chunk}"
     end
 
     def parse_animation(chunk, config)

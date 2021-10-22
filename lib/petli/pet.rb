@@ -18,8 +18,8 @@ module Petli
 
     def initialize
       super()
-      @atlas = Tatty::Atlas.new('./data/character.txtanim')
-      react(:hatch) if (Time.now - self.birth) < 10
+      @atlas = Tatty::Atlas.new('./data/infant/baby.txtanim')
+      hatch if (Time.now - self.birth) < 10
     end
 
     def reset
@@ -112,6 +112,14 @@ module Petli
       react(:embarass)
     end
 
+    def hatch
+      @doing = Tatty::Anim.from_atlas('./data/hatch.txtanim')
+    end
+
+    def death
+      @death ||= Tatty::Anim.from_atlas('./data/death.txtanim')
+    end
+
     def react(action)
       anim = @atlas[action]
       anim.reset
@@ -124,7 +132,7 @@ module Petli
 
     def animation
       if self.dead?
-        @atlas[:death]
+        death
       elsif !@doing.nil?
         @doing
       elsif self.sick > 0

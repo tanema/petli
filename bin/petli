@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
-require 'petli'
-require 'tatty'
+require_relative './bootstrap'
 require 'optparse'
 
 options = {}

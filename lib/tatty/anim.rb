@@ -10,6 +10,13 @@ module Tatty
       @atlas = atlas
       @rate = kargs[:speed] || 2
       @loop = kargs[:loop] || false
+      if kargs[:loop_for].nil?
+        @loop_for = -1
+      else
+        @loop = false
+        @loop_for_start = kargs[:loop_for] || -1
+        @loop_for = @loop_for_start
+      end
       @name = kargs[:name]
       @width = kargs[:width]
       @height = kargs[:height]
@@ -18,12 +25,14 @@ module Tatty
 
     def reset
       @frame = 0
+      @loop_for = @loop_for_start if @loop_for == 0
     end
 
     def step
       @frame += 1
       if rate_frame >= @atlas.count
-        reset if @loop
+        reset if self.loop
+        @loop_for -= 1 if @loop_for > 0
         true
       else
         false
@@ -37,6 +46,10 @@ module Tatty
     def next
       step
       display
+    end
+
+    def loop
+      @loop || @loop_for > 0
     end
 
     private

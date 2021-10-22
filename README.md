@@ -37,6 +37,6 @@ Usage: petli [options]
 $> git clone git@github.com:tanema/petli.git
 $> cd petli
 $> bundle install
-$> rake install
+$> rake install:local
 $> petli
 ```

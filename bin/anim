@@ -19,9 +19,11 @@ class Animate < Tatty::Stage
   end
 end
 
-animation = Tatty::Anim.from_atlas(ARGV[0], name: ARGV[1])
+filepath = ARGV[0]
+name = ARGV[1] || :default
+animation = Tatty::Anim.from_atlas(filepath, name: name)
 if animation.nil?
-  puts "Cannot find animation #{ARGV[1]}"
+  puts "Cannot find animation '#{name}'"
 else
   Tatty.run(Animate, animation: animation)
 end
