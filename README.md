@@ -4,6 +4,9 @@
   <p align="center">
     <img src="https://media.giphy.com/media/pwtUe2wVhgpQIK5puU/giphy.gif"/>
   </p>
+  <p align="center">
+    <a href="https://badge.fury.io/rb/petli"><img src="https://badge.fury.io/rb/petli.svg" alt="Gem Version" height="18"></a>
+  </p>
 </p>
 
 ---
