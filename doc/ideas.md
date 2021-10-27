@@ -1,0 +1,8 @@
+- Features missing
+  - [ ] evolution
+  - [ ] discipline
+  - [ ] sleep
+- Work Aide
+  - [ ] Tells you when to take a break?
+  - [ ] Set end time to tell you when to end your day
+  - [ ] set mode workmode/longlast mode

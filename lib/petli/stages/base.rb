@@ -54,7 +54,7 @@ module Petli
 
         poop = @poop.next
         @pet.poops.each_with_index do |_, i|
-          x, y = POOP_LOCATIONS[i]
+          x, y = Pet::POOP_LOCATIONS[i]
           render_at(left+1+x, top+1+y, poop)
         end
 

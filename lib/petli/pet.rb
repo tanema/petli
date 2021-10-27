@@ -18,7 +18,7 @@ module Petli
 
     def initialize
       super()
-      @atlas = Tatty::Atlas.new('./data/infant/baby.txtanim')
+      @atlas = avail_animations[:infant].first
       hatch if (Time.now - self.birth) < 10
     end
 
@@ -113,11 +113,7 @@ module Petli
     end
 
     def hatch
-      @doing = Tatty::Anim.from_atlas('./data/hatch.txtanim')
-    end
-
-    def death
-      @death ||= Tatty::Anim.from_atlas('./data/death.txtanim')
+      @doing = avail_animations[:hatch]
     end
 
     def react(action)
@@ -132,7 +128,7 @@ module Petli
 
     def animation
       if self.dead?
-        death
+        avail_animations[:death]
       elsif !@doing.nil?
         @doing
       elsif self.sick > 0
@@ -140,6 +136,16 @@ module Petli
       else
         @atlas["walk_#{self.mood}"]
       end
+    end
+
+    def avail_animations
+      @avail_animations ||= {
+        hatch: Tatty::Anim.from_atlas('./data/hatch.txtanim'),
+        infant: Dir["./data/infant/*.txtanim"].map {|p| Tatty::Atlas.new(p) },
+        teen: Dir["./data/teen/*.txtanim"].map {|p| Tatty::Atlas.new(p) },
+        adult: Dir["./data/adult/*.txtanim"].map {|p| Tatty::Atlas.new(p) },
+        death: Tatty::Anim.from_atlas('./data/death.txtanim'),
+      }
     end
   end
 end

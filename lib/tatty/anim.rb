@@ -6,7 +6,7 @@ module Tatty
       Atlas.new(filepath)[name]
     end
 
-    def initialize(atlas, **kargs)
+    def initialize(atlas, width:, height:, **kargs)
       @atlas = atlas
       @rate = kargs[:speed] || 2
       @loop = kargs[:loop] || false
@@ -18,8 +18,8 @@ module Tatty
         @loop_for = @loop_for_start
       end
       @name = kargs[:name]
-      @width = kargs[:width]
-      @height = kargs[:height]
+      @width = width
+      @height = height
       reset
     end
 
