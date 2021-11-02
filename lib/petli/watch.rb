@@ -15,6 +15,11 @@ module Petli
       time_elapsed(last, HOURS_DIV)
     end
 
+    def for_hours_since(last)
+      hours_past = hours_since(last)
+      (0...hours_past).each { |i| yield(i, hours_ago(i)) } if hours_past > 1
+    end
+
     def hours_ago(hrs)
       Time.now - (hrs * 3600)
     end

@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   HERE
   s.metadata      = { "source_code_uri" => "https://github.com/tanema/petli" }
 
-  s.files         = Dir.glob('{bin/*,lib/**/*,data/*,[A-Z]*}')
+  s.files         = Dir.glob('{bin/*,lib/**/*,data/**/*,[A-Z]*}')
   s.bindir        = "bin"
   s.executables   = ["petli"]
   s.require_paths = ['lib']
