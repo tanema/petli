@@ -2,17 +2,16 @@ module Petli
   module Stages
     class Feed < Base
       def actions
-        %w(bread snack med)
+        {
+          bread: -> {feed(:bread)},
+          snack: -> {feed(:candy)},
+          med:   -> {feed(:medicine)},
+          else:  -> {goto(Main, pet: @pet)},
+        }
       end
 
-      def onkey(event)
-        if event.value == "b"
-          @pet.feed(food: :bread)
-        elsif event.value == "s"
-          @pet.feed(food: :candy)
-        elsif event.value == "m"
-          @pet.feed(food: :medicine)
-        end
+      def feed(food)
+        @pet.feed(food: food)
         goto(Main, pet: @pet)
       end
     end

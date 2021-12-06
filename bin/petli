@@ -7,10 +7,9 @@ OptionParser.new do |opts|
   opts.banner = "Usage: petli [options]"
   opts.on("-r", "--reset", "Reset button to start over again") {|v| options[:reset] = v }
   opts.on("-s", "--status", "Dump pet status") {|v| options[:status] = v}
-  opts.on("-b", "--bread", "Feed your pet bread without viewing") {|v| options[:bread] = v}
-  opts.on("-c", "--candy", "Feed your pet candy without viewing") {|v| options[:candy] = v}
-  opts.on("-m", "--medicine", "Feed your pet candy without viewing") {|v| options[:medicine] = v}
-  opts.on("-l", "--clean", "Clean up any 'dirt' without viewing") {|v| options[:clean] = v}
+  opts.on("-f FOOD", "--feed=FOOD", "Feed your pet bread without viewing") {|v| options[:feed] = v}
+  opts.on("-c", "--clean", "Clean up any 'dirt' without viewing") {|v| options[:clean] = v}
+  opts.on("-l", "--light", "Hit the lightswitch") {|v| options[:light] = v}
   opts.on("-p", "--path [PATH]", "path to your pet data (defaults to system config dir)") do |v|
     $tattydboverridepath = v
   end
@@ -18,18 +17,22 @@ end.parse!
 
 pet = Petli::Pet.new
 pet.display # force pet to update first
+FOOD_OPTIONS = [:bread, :candy, :medicine]
 
 if options[:reset]
   Tatty::DB.clear
   puts "Goodbye. I hope you love your next pet!"
 elsif options[:status]
   puts Tatty::DB.dump
-elsif options[:bread]
-  pet.feed!(food: :bread)
-elsif options[:candy]
-  pet.feed!(food: :candy)
-elsif options[:medicine]
-  pet.feed!(food: :medicine)
+elsif options[:feed]
+  if [:bread, :candy, :medicine].include?(options[:feed].to_sym)
+    pet.feed!(food: options[:feed].to_sym)
+  else
+    puts "Unknown food #{options[:feed]}, only accepts #{FOOD_OPTIONS.join(", ")}"
+    exit 1
+  end
+elsif options[:light]
+  pet.light_switch
 elsif options[:clean]
   pet.clean
 else

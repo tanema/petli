@@ -8,7 +8,10 @@ module Petli
       end
 
       def actions
-        %w(left right)
+        {
+          left:  -> {pick("l")},
+          right: -> {pick("r")},
+        }
       end
 
       def enter
@@ -19,10 +22,9 @@ module Petli
         @pet.reset
       end
 
-      def onkey(event)
-        return if event.value != "l" and event.value != "r"
+      def pick(dir)
         @petpickedleft = rand(1..2) == 1
-        @pickedleft = event.value == "l"
+        @pickedleft = dir == "l"
         (@petpickedleft == @pickedleft) ? @pet.celebrate : @pet.embarass
         @countdown = 10
       end

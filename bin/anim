@@ -16,14 +16,9 @@ class Animate < Tatty::Stage
     done = @animation.step
     @animation.reset if !@animation.loop and done
     render_at(0, 0, @animation.display)
+    render_at(0, 5, "Animation: #{@animation.name}")
   end
 end
 
-filepath = ARGV[0]
-name = ARGV[1] || :default
-animation = Tatty::Anim.from_atlas(filepath, name: name)
-if animation.nil?
-  puts "Cannot find animation '#{name}'"
-else
-  Tatty.run(Animate, animation: animation)
-end
+atlas = Tatty::Atlas.new(ARGV[0])
+Tatty.run(Animate, animation: atlas[ARGV[1] || :default] || atlas[atlas.names.first])

@@ -9,10 +9,8 @@ module Tatty
 
   def self.run(klass, **kargs)
     self.goto(klass, **kargs)
-    @reader = TTY::Reader.new
-    @reader.on(:keypress) do |event|
-      self.stage.keypress(event)
-    end
+    @reader = TTY::Reader.new(track_history: false)
+    @reader.on(:keypress){|e| self.stage.keypress(e)}
 
     begin
       TTY::Cursor.invisible do

@@ -12,6 +12,10 @@ module Tatty
       @sheet[name.to_sym]
     end
 
+    def names
+      @sheet.keys
+    end
+
     private
 
     def parse_data

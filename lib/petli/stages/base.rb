@@ -14,21 +14,27 @@ module Petli
       end
 
       def keypress(event)
-        exit if event.value == "q" || event.value == "\e" || event.value == "x"
+        key = event.value.downcase
+        exit if key == "q" || key == "\e" || key == "x"
         return if @pet.busy? || @pet.dead?
         @page -= 1 if event.key.name == :left && @page > 0
         @page += 1 if event.key.name == :right && @page < action_pages.count - 1
-        onkey(event)
+        keyact = self.actions.keys.find{|k| k[0].to_s.downcase == key}
+        if !keyact.nil?
+          actions[keyact].call
+        elsif !self.actions[:else].nil?
+          actions[:else].call
+        end
       end
 
       def actions
-        %w()
+        {}
       end
 
       def action_pages
         pages = []
         current_page = []
-        fmt_actions = self.actions.map{|a| "[#{a[0].capitalize}]#{a[1..]}"}
+        fmt_actions = self.actions.filter{|a,b| a != :else}.keys.map{|a| "[#{a[0].capitalize}]#{a[1..]}"}
         fmt_actions.each do |action|
           len = (current_page + [action]).join(" ").length
           if len >= GAME_WIDTH-2

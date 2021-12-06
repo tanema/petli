@@ -10,7 +10,10 @@ module Petli
       end
 
       def actions
-        %w(higher lower)
+        {
+          higher: -> {pick("h")},
+          lower:  -> {pick("l")},
+        }
       end
 
       def enter
@@ -24,11 +27,9 @@ module Petli
       def roll
       end
 
-      def onkey(event)
-        return if event.value != "h" and event.value != "l"
-        @pickedhigher = event.value == "h"
+      def pick(dir)
         @pick = (1..6).to_a.sample
-        @won = (event.value == "h" && @pick > @value) || (event.value == "l" && @pick < @value)
+        @won = (dir == "h" && @pick > @value) || (dir == "l" && @pick < @value)
         @won ? @pet.celebrate : @pet.embarass
         @countdown = 10
       end
