@@ -2,12 +2,13 @@ module Petli
   module Stages
     class Feed < Base
       def actions
-        {
+        acts = {
           bread: -> {feed(:bread)},
           snack: -> {feed(:candy)},
-          med:   -> {feed(:medicine)},
           else:  -> {goto(Main, pet: @pet)},
         }
+        acts[:med] = -> {feed(:medicine)} if @pet.sick?
+        acts
       end
 
       def feed(food)

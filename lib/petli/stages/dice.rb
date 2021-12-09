@@ -29,6 +29,7 @@ module Petli
 
       def pick(dir)
         @pick = (1..6).to_a.sample
+        @pickedhigher = dir == "h"
         @won = (dir == "h" && @pick > @value) || (dir == "l" && @pick < @value)
         @won ? @pet.celebrate : @pet.embarass
         @countdown = 10

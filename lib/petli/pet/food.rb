@@ -12,12 +12,7 @@ module Petli
 
       def update_hunger
         for_hours_since(last_meal) do |i, hr_ago|
-          self.last_meal = Time.now
-          next if rand <= 0.3
-          self.health = [1, self.health-1].max
-          self.happiness = [1, self.happiness-1].max
-          self.poops << hr_ago if rand <= 0.8 && self.poops.count < POOP_LOCATIONS.count
-          self.sick = self.poops.filter{|poop| hours_since(poop) > 1 }.count
+          hunger(hr_ago) if rand >= 0.3
         end
       end
 
@@ -32,6 +27,14 @@ module Petli
         self.health = [10, self.health+2].min unless food == :medicine
         self.happiness = [10, self.happiness+2].min if food == :candy
         self.sick = [0, self.sick - 1].max if food == :medicine
+      end
+
+      def hunger(hr_ago=hours_ago(1))
+        self.health = [1, self.health-1].max
+        self.happiness = [1, self.happiness-1].max
+        self.poops = self.poops + [hr_ago] if rand <= 0.4 && self.poops.count < POOP_LOCATIONS.count
+        self.sick = [self.poops.filter{|poop| hours_since(poop) > 1 }.count, 3].min
+        self.last_meal = Time.now
       end
 
       def clean

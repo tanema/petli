@@ -25,9 +25,5 @@ module Petli
       update_animation
       animation.display
     end
-
-    def lifetime
-      (self.died_at.nil? ? days_since(self.birth) : days_since(self.birth, self.died_at)).to_i
-    end
   end
 end
